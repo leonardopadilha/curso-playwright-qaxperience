@@ -1,24 +1,28 @@
 import { test, expect } from "@playwright/test";
+import { TaskModel } from "./fixtures/task.model";
 //import { faker } from '@faker-js/faker';
+
 
 test('Deve poder cadastrar uma nova tarefa utilizando CSS Selector', async ({ page, request }) => {
     
+    const task: TaskModel = {
+        name: 'Ler um livro de TypeScript',
+        is_done: false 
+    }
 
-    const textoDigitado = 'Ler um livro de TypeScript';
-
-    await request.delete(`http://localhost:3333/helper/tasks/${textoDigitado}`)
+    await request.delete(`http://localhost:3333/helper/tasks/${task.name}`)
     
     await page.goto('http://127.0.0.1:3000')
 
     //const textoDigitado = faker.lorem.words();
 
 
-    await page.fill('input[placeholder="Add a new Task"]', textoDigitado)
+    await page.fill('input[placeholder="Add a new Task"]', task.name)
     await page.click('button[class*="ButtonNewTask"]')
 
     //let textoEsperado = page.locator('div:nth-child(3) > p');
-    let textoEsperado = page.locator(`css=.task-item p >> text=${textoDigitado}`);
-    await expect(textoEsperado).toContainText(textoDigitado);
+    let textoEsperado = page.locator(`css=.task-item p >> text=${task.name}`);
+    await expect(textoEsperado).toContainText(task.name);
 });
 
 test('Deve poder cadastrar uma nova tarefa utilizando Xpath', async ({ page, request }) => {
@@ -65,7 +69,7 @@ test('Deve poder cadastrar uma nova tarefa utilizando recurso exclusivo do playw
 
 test('não deve permitir tarefa duplicada', async ({ page, request }) => {
 
-    const task = {
+    const task: TaskModel = {
         name: 'Comprar ketchup',
         is_done: false
     }
