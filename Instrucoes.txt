@@ -37,4 +37,6 @@ npx playwright test --debug
 
 npx playwright test tasks --debug
 
+npx playwright show-report
+
 npm i @faker-js/faker -D
