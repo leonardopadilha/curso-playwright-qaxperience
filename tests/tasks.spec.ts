@@ -2,13 +2,12 @@ import { test, expect } from "@playwright/test";
 import { TaskModel } from "./fixtures/task.model";
 import { deleteTaskByHelper, postTask } from "./support/helpers";
 import { TasksPage } from "./support/pages/tasks";
+
+import data from "./fixtures/tasks.json";
 //import { faker } from '@faker-js/faker';
 
 test('Deve poder cadastrar uma nova tarefa utilizando CSS Selector', async ({ page, request }) => {
-    const task: TaskModel = {
-        name: 'Ler um livro de TypeScript',
-        is_done: false 
-    }
+    const task = data.success as TaskModel;
 
     await deleteTaskByHelper(request, task.name);
     
@@ -69,10 +68,7 @@ test('Deve poder cadastrar uma nova tarefa utilizando CSS Selector', async ({ pa
 }); */
 
 test('não deve permitir tarefa duplicada', async ({ page, request }) => {
-    const task: TaskModel = {
-        name: 'Comprar ketchup',
-        is_done: false
-    }
+    const task = data.duplicate as TaskModel;
 
     await deleteTaskByHelper(request, task.name);
     await postTask(request, task)
@@ -88,10 +84,7 @@ test('não deve permitir tarefa duplicada', async ({ page, request }) => {
 
 test('campo obrigatório', async ({ page }) => {
 
-    const task: TaskModel = {
-        name: '',
-        is_done: false
-    }
+    const task = data.required as TaskModel;
     
     const taskPage: TasksPage = new TasksPage(page);
 
