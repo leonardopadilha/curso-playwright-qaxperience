@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 import { TaskModel } from "./fixtures/task.model";
 import { deleteTaskByHelper, postTask } from "./support/helpers";
 import { TasksPage } from "./support/pages/tasks";
@@ -85,3 +85,20 @@ test('não deve permitir tarefa duplicada', async ({ page, request }) => {
  
     //await page.click('css=button >> text=Create')
 });
+
+test('campo obrigatório', async ({ page }) => {
+
+    const task: TaskModel = {
+        name: '',
+        is_done: false
+    }
+    
+    const taskPage: TasksPage = new TasksPage(page);
+
+    await taskPage.go();
+    await taskPage.create(task);
+
+    //campo obrigatório sem a mensagem em HTML
+    const validationMessage = await taskPage.inputTaskName.evaluate(e => (e as HTMLInputElement).validationMessage)
+    expect(validationMessage).toEqual('This is a required field')
+})
