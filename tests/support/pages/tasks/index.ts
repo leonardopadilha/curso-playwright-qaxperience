@@ -23,6 +23,13 @@ export class TasksPage {
         await target.click()
     }
 
+    async remove(taskName: string) {
+        const localizador = `xpath=//p[text()="${taskName}"]/..//button[contains(@class, "Delete")]`;
+        
+        const target = this.page.locator(localizador)
+        await target.click()
+    }
+
     async go() {
         await this.page.goto('http://localhost:3000')
     }
@@ -30,6 +37,11 @@ export class TasksPage {
     async shouldHaveText(taskName: string) {
         let textoEsperado = this.page.locator(`css=.task-item p >> text=${taskName}`);
         await expect(textoEsperado).toBeVisible();
+    }
+
+    async shouldNotExist(taskName: string) {
+        let textoEsperado = this.page.locator(`css=.task-item p >> text=${taskName}`);
+        await expect(textoEsperado).not.toBeVisible();
     }
 
     async alertHaveText(text: string) {
